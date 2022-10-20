@@ -1,5 +1,19 @@
 <script setup>
 import Logo from "../svg/logo.svg?component";
+import { ref, watch } from "vue";
+import { useRouter } from "vue-router";
+import { useRoute } from "vue-router";
+
+const route = useRoute();
+const keyword = ref(route.query.keyword || "");
+const router = useRouter();
+
+const handleSearch = () => {
+  const newVal = keyword.value.trim();
+  if (newVal) {
+    router.push({ name: "Search", query: { keyword: newVal } });
+  }
+};
 </script>
 
 <template>
@@ -169,8 +183,10 @@ import Logo from "../svg/logo.svg?component";
                 type="text"
                 class="header__search-input"
                 placeholder="Đăng ký và nhận voucher bạn mới đến 70k!"
+                v-model="keyword"
+                @keyup.enter="handleSearch"
               />
-              <div class="header__search-history">
+              <!-- <div class="header__search-history">
                 <ul class="history__list">
                   <li class="login__list">
                     Đăng ký và nhận voucher bạn mới đến 70k!
@@ -179,7 +195,7 @@ import Logo from "../svg/logo.svg?component";
                     <img src="@/assets/images/km.png" alt="" />
                   </li>
                 </ul>
-              </div>
+              </div> -->
             </div>
             <button class="header__search-btn">
               <i class="header__search-icon fas fa-search"></i>

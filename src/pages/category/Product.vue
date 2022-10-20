@@ -20,7 +20,7 @@ const getSalePercent = (price, salePrice) => `${Math.ceil(salePrice / price)}%`;
     <router-link to="/" class="home-product-item">
       <div
         class="home-product-item__img"
-        :style="`background-image: url('${data.images[0]}')`"
+        :style="`background-image: url('${data?.images[0]}')`"
       ></div>
       <h4 class="home-product-item__name">
         {{ data.name }}

@@ -11,6 +11,11 @@ const routes = [
     name: "Category",
     component: () => import("./pages/category/index.vue"),
   },
+  {
+    path: "/tim-kiem",
+    name: "Search",
+    component: () => import("./pages/search/index.vue"),
+  },
 ];
 
 const router = createRouter({
