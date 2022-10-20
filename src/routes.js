@@ -16,6 +16,15 @@ const routes = [
     name: "Search",
     component: () => import("./pages/search/index.vue"),
   },
+  {
+    path: "/san-pham/:slug",
+    name: "Product",
+    component: () => import("./pages/products/index.vue"),
+  },
+  {
+    path: "/:pathMatch(.*)*",
+    redirect: "/",
+  },
 ];
 
 const router = createRouter({

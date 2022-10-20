@@ -32,6 +32,8 @@ $(".genre-container").slick({
   nextArrow:
     '<button class="fa-solid fa-chevron-right" style="position: absolute; top:calc(50% - 25px); right:0; height:50px; width: 30px; border:none;background-color: #d2d2d2; border-radius: 50%;"></button>',
 });
+
+const getUrl = (slug) => `${import.meta.env.VITE_API_URL}/${slug}`;
 </script>
 
 <template>
@@ -50,10 +52,7 @@ $(".genre-container").slick({
         >
           <div class="genre-item">
             <div class="genre-item-img">
-              <img
-                :src="`https://api-placeholder.vercel.app/${it.image}`"
-                alt=""
-              />
+              <img :src="getUrl(it.image)" alt="" />
             </div>
             <p>{{ it.name }}</p>
           </div>

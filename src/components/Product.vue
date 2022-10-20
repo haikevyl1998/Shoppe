@@ -14,10 +14,16 @@ const formatPrice = (price) =>
   );
 
 const getSalePercent = (price, salePrice) => `${Math.ceil(salePrice / price)}%`;
+
+const formatNumber = (val) =>
+  val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 </script>
 
 <template>
-  <router-link :to="data.slug" class="home-product-item">
+  <router-link
+    :to="{ name: 'Product', params: { slug: data.slug } }"
+    class="home-product-item"
+  >
     <div
       class="home-product-item__img"
       :style="`background-image: url('${data.images[0]}')`"
@@ -27,7 +33,9 @@ const getSalePercent = (price, salePrice) => `${Math.ceil(salePrice / price)}%`;
       <span class="home-product-item__price-current">
         {{ formatPrice(data.salePrice) }}
       </span>
-      <span class="home-product-item-sold">88 đã bán</span>
+      <span class="home-product-item-sold"
+        >{{ formatNumber(data.quantity_sold) }} đã bán</span
+      >
     </div>
     <div class="home-product-item-favourite">
       <i class="fas fa-check"></i>
