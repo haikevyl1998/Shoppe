@@ -1,9 +1,78 @@
+<script setup>
+import { ref, watch, defineProps } from "vue";
+import { useRoute, useRouter } from "vue-router";
+
+const route = useRoute();
+const { orderBy, page, order } = route.query;
+const router = useRouter();
+
+const currentOrderBy = ref(orderBy);
+const currentOrder = ref(order);
+watch(
+  () => route.query,
+  (newVal) => {
+    if (newVal.orderBy) {
+      currentOrderBy.value = newVal.orderBy;
+    }
+    if (newVal.order) {
+      currentOrder.value = newVal.oder;
+    }
+  }
+);
+
+defineProps(["pagination"]);
+</script>
+
 <template>
   <div class="home-filter">
     <span class="home-filter__label">Sắp xếp theo</span>
-    <button class="home-filter__btn btn">Phổ biến</button>
-    <button class="home-filter__btn btn btn--primary">Mới nhất</button>
-    <button class="home-filter__btn btn">Bán chạy</button>
+    <button
+      class="home-filter__btn btn"
+      :class="currentOrderBy === 'views' ? 'btn--primary' : ''"
+      @click="
+        () => {
+          currentOrderBy !== 'views' &&
+            router.push({
+              name: 'Category',
+              query: { orderBy: 'views' },
+            });
+        }
+      "
+    >
+      Phổ biến
+    </button>
+    <button
+      class="home-filter__btn btn"
+      :class="
+        currentOrderBy === 'createdAt' || !currentOrderBy ? 'btn--primary' : ''
+      "
+      @click="
+        () => {
+          currentOrderBy !== 'createdAt' &&
+            router.push({
+              name: 'Category',
+              query: { orderBy: 'createdAt' },
+            });
+        }
+      "
+    >
+      Mới nhất
+    </button>
+    <button
+      class="home-filter__btn btn"
+      :class="currentOrderBy === 'quantity_sold' ? 'btn--primary' : ''"
+      @click="
+        () => {
+          currentOrderBy !== 'quantity_sold' &&
+            router.push({
+              name: 'Category',
+              query: { orderBy: 'quantity_sold' },
+            });
+        }
+      "
+    >
+      Bán chạy
+    </button>
 
     <div class="select__input--btn">
       <span class="select-input__label">Giá</span>
@@ -12,27 +81,88 @@
       <!-- list option -->
       <ul class="select-input__list">
         <li class="select-input__item">
-          <a class="select-input__link">Giá: từ cao đến thấp</a>
+          <a
+            class="select-input__link"
+            @click.prevent="
+              () => {
+                if (
+                  currentOrderBy !== 'price' ||
+                  (currentOrderBy === 'price' && order !== 'desc')
+                ) {
+                  router.push({
+                    name: 'Category',
+                    query: { orderBy: 'price', order: 'desc' },
+                  });
+                }
+              }
+            "
+            >Giá: từ cao đến thấp</a
+          >
         </li>
         <li class="select-input__item">
-          <a class="select-input__link">Giá: từ thấp đến cao</a>
+          <a
+            class="select-input__link"
+            @click.prevent="
+              () => {
+                if (
+                  currentOrderBy !== 'price' ||
+                  (currentOrderBy === 'price' && order !== 'asc')
+                ) {
+                  router.push({
+                    name: 'Category',
+                    query: { orderBy: 'price', order: 'asc' },
+                  });
+                }
+              }
+            "
+            >Giá: từ thấp đến cao</a
+          >
         </li>
       </ul>
     </div>
 
-    <div class="home-filter__page">
+    <!-- <div class="home-filter__page">
       <span class="home-filter__page-num">
-        <span class="home-filter__page-current">1</span>/14
+        <span class="home-filter__page-current">
+          {{ pagination._CurrentPage }}</span
+        >
+        / {{ pagination._totalPage }}
       </span>
       <div class="home-filter__page-control">
-        <a href="" class="home-filter__page-btn home-filter__page-btn-disable">
+        <a
+          href=""
+          class="home-filter__page-btn"
+          :class="
+            pagination._prevPage === null && 'home-filter__page-btn-disable'
+          "
+        >
           <i class="home-filter__page-icon fas fa-chevron-left"></i>
         </a>
-        <a href="" class="home-filter__page-btn">
+        <a
+          href=""
+          class="home-filter__page-btn"
+          :class="
+            pagination._nextPage === null && 'home-filter__page-btn-disable'
+          "
+          @click.prevent="
+            () => {
+              router.push({
+                name: 'Category',
+                query: {
+                  ...(currentOrderBy && {
+                    orderBy: currentOrderBy,
+                  }),
+                  ...(currentOrder && { _oder: currentOrder }),
+                  _page: pagination._nextPage,
+                },
+              });
+            }
+          "
+        >
           <i class="home-filter__page-icon fas fa-chevron-right"></i>
         </a>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -52,9 +182,9 @@
 
 .select-input__list {
   position: absolute;
-  left: 0;
-  right: 0;
   top: 35px;
+  left: 0;
+  min-width: 230px;
   border-radius: 2px;
   background-color: var(--white-color);
   padding: 8px 16px;
